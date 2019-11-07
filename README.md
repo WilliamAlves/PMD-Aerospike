@@ -481,10 +481,6 @@ Enquanto na replicação assíncrona, uma das formas de se relaxar a consistênc
 
 Quando o banco está se recuperando de um reparticionamento, podem haver escritas perdidas, na replicação assíncrona.
 
-| ![Consistency](https://github.com/WilliamAlves/PMD-Aerospike/blob/master/images/consistency.png) | 
-|:--:| 
-| *Ilustração de como o Aerospike atualiza um registro e suas cópias, de modo a manter a consistência* |
-
 
 ### Disponibilidade
 Como o sistema é configurado como AP, do teorema CAP, a disponibilidade é um dos fatores mais importantes no banco de dados, perdendo um pouco da consistência. O Aerospike diz ter disponibilidade perfeita, sendo que sempre que um nó cai, outros vão estar disponíveis com a informação necessária para ser utilizada.
