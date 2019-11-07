@@ -10,6 +10,10 @@ A camada de cliente é utilizada para manter controle sobre as configurações d
 
 A camada de dados é otimizada para armazenar os dados em discos rígidos e memórias flash, sendo os índices do banco armazenados em RAM para rápida disponibilidade, e os dados escritos escritos em blocos, para diminuir a latência.
 
+| ![Arquitetura](https://www.aerospike.com/docs/architecture/assets/as-architecture.png) | 
+|:--:| 
+| *Arquitetura do Aerospike* |
+
 Para o desenvolvimento deste documento e exemplos, utilizamos versão ```4.7.0.2``` do Aerospike.
 
 ### Instalação e configuração no Ubuntu 18.04+
