@@ -109,12 +109,15 @@ Chaves (*Keys*) são utilizadas para ler e escrever registros (*records*) no ban
 ### Como interagir com o sistema?
 Conforme citado acima, uma das maneiras de se interagir com o Aerospike é através do [AMC](https://www.aerospike.com/docs/amc/) (*Aerospike Management Console*), que fornece uma interface gráfica onde é possível analizar os nós do cluster e algumas métrias.
 
-
 | ![AMC](https://github.com/WilliamAlves/PMD-Aerospike/blob/master/images/amc1.png) | 
 |:--:| 
 | *Imagem do Aerospike Management Console (AMC), de onde é possível visualizar e gerenciar os nós e registros do Aerospike* |
 
 Outra maneira, é através do (*Aerospike Query Client*), utilizando a AQL (*Aerospike Query Language*). Com o Aerospike inicializado, basta digitar ```aql``` no terminal que o *Shell* AQC será inicializado, onde é possível utilizar a linguagem *SQL-like* do Aerospike para inserir e/ou manipular os *namespaces*, *sets*, *rows* e *bins* do banco.  
+
+| ![AQC](https://miro.medium.com/max/1320/1*OU2M3uR78TV-lPKy5_PHOg.png) | 
+|:--:| 
+| *Imagem de um terminal rodando o AQC* |
 
 ### Comandos Básicos: Aerospike Query Language (AQL)
 O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas. 
