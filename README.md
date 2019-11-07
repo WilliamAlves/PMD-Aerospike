@@ -1,5 +1,7 @@
-# Introdução
-O Aerospike é um banco de dados NoSQL  Key-Value (com suporte, também, a orientação a documentos) distribuído, desenhado para aplicações que devem estar sempre disponíveis e lidar com big data de maneira confiável.
+# AEROSPIKE
+
+## Introdução
+O Aerospike é um banco de dados NoSQL  Key-Value distribuído, desenhado para aplicações que devem estar sempre disponíveis e lidar com big data de maneira confiável.
 Desenvolvida em C, opera em três camadas: Uma camada de dados, uma camada de distribuição autogerenciada (o *"Aerospike Smart Cluster"*) e uma camada de cliente (o *"Aerospike Smart Client"*).
 A camada de distribuição é replicada através de diferentes nós, para garantir consistência. Permitindo também que o banco de dados se mantenha operacional frente a falhas em nós individuais, ou a remoção de algum deles.
 A camada de cliente é utilizada para manter controle sobre as configurações do *cluster* e a localização dos dados, e gerenciar o servidor.
@@ -55,12 +57,14 @@ No MAC OS, o Aerospike funciona dentro de um ambiente virtual, por isso, é nece
     * sudo service aerospike start
     * sudo service amc start
 
-### Comandos Básicos
+### Como interagir com o sistema?
+Conforme citado acima, uma das maneiras de se interagir com o Aerospike é através do [AMC](https://www.aerospike.com/docs/amc/) (*Aerospike Management Console*), que fornece uma interface gráfica onde é possível analizar os nós do cluster e algumas métrias.
 
-### Aerospike Query Language} (AQL)
+
+### Comandos Básicos: Aerospike Query Language (AQL)
 O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas. 
 
-# Arquitetura
+## Arquitetura
 O Aerospike utiliza o *Shared-Nothing* (SN), arquitetura de computação distribuída onde cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a  confiabilidade, o Aerospike também replica os dados em diferentes nós.
 
 ### Terminologia
@@ -93,7 +97,7 @@ Para o caso de fator de replicação 2, por exemplo, além das 1/n partições d
 | *Replicação fator 2. Dois nós em um cluster que são master e réplica.* |
 
 
-# Implementação de propriedades
+## Implementação de propriedades
  Conforme o teorema CAP, o Aerospike, até a versão 3.0, é um banco de dados AP - isto é, oferece disponibilidade ao invés de consistência, em casos de partição de rede. O Aerospike 3.0 não fornece diversas funcionalidades que são necessárias para consistência de replicação durante uma transação. Em vez disso, permite que o dado esteja disponível e aceitando escritas - criando, eventualmente, conflitos de escrita. O processo de escolher uma versão do dado para ser persistida, em caso de versões conflitantes, pode resultar em perda de dado.
 
 À partir da versão 4.0, o Aerospike suporta tanto o modo AP (Disponível e Tolerante à partição), quanto o modo CP (Consistente e Tolerante à partição). Sendo o modo configurado através das políticas do “namespace”.
