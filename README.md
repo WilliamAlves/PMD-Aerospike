@@ -489,3 +489,44 @@ O Aerospike foi desenhado para aplicações que devem estar sempre disponíveis 
 [Teste do link]: <https://twitter.com/littleis13>
 [casos de uso]: <https://www.aerospike.com/solutions/technology/use-cases/>
 
+### Glossário de Termos
+
+* *Schemaless*: Não segue uma estrutura pré-definida ou específica. Não estruturado.
+
+* *Namespace*: Uma coleção de dados que segue uma "política" comum. É o equivalente deste sistema aos bancos de dados dos sistemas relacionais.
+
+* *Set*: Um conjunto de registros. Equivalente a uma tabela em um banco de dados relacional.
+
+* *Record*: Registro. Equivalente a um registro/linha de um banco de dados relacional.
+
+* *Bin*: Campo. Equivalente a uma coluna em banco de dados relacional.
+
+* *Index*: índice de um registro. Permite localizar/realizar buscas por uma característica dos registros.
+
+* *Aerospike Management Console*: Interface visual fornecida pelo Aerospike para analisar e gerenciar os nós e seus *namespaces* e *records*.
+
+* *Aerospike Query Client*: Interface em linha de comando do Aerospike para manipular dados e gerenciar o *cluster*.
+
+* *SQL-like*: Baseada no SQL. Próxima ao SQL.
+
+* *User Defined Functions* (UDF): Funções criadas pelo usuário para algum tipo de processamento ou transformação nos dados.
+
+* *RIPEMD160*: Uma função hash de distribuição aleatória.
+
+* *Sharding*: Arquitetura de banco de dados, onde os dados podem ser espalhado por várias máquinas. Equivalente a “Share-nothing”.
+
+* *Hot spots*: Um ponto único de falha. Um ponto/local de onde muitos dados são processados ou requisitados.
+
+* *Commitar*: Submeter. Se refere à reconhecer uma transação no banco de dados. Ter enviado uma mudança.
+
+* *Multi-record*: no contexto utilizado, se refere a transações que utilizam dados de mais de um nó. “Multi-record transactions”, transações com dados de vários nós do *cluster*.
+
+* *Single-record*: no contexto utilizado, se refere a transações que utilizam dados de um único nó. “Single-record transactions”, transações com dados de um mesmo nó do *cluster*.
+
+* *Full Linearizable*: Que pode ser feito de maneira sequencial. Pode ser linearizado/ordenado.
+
+* *Shared-nothing*: Arquitetura de computação distribuída onde cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Equivalente a “Sharding”.
+
+* *Big Data*: Um grande volume de dados.
+
+
