@@ -149,6 +149,43 @@ Outra maneira, é através do (*Aerospike Query Client*), utilizando a AQL (*Aer
 ### Comandos Básicos: Aerospike Query Language (AQL)
 O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas. 
 
+##### Inicializando o AQC 
+1. No terminal, digite: 
+```sudo service aerospike start``` (Linux) ou
+``` vagrant up ```
+``` vagrant ssh ``` 
+``` sudo service aerospike start ``` 
+``` sudo service amc start ```  (Mac OS)
+para iniciar o Aerospike.
+2. Digite então ```aql``` para iniciar o AQC.
+
+##### Cria um novo *namespace*
+
+##### Lista os *namespaces*
+
+##### Lista os *sets*
+
+##### Deleta um *namespace*
+
+##### Insere um registro
+
+##### Lista registros
+
+##### Seleciona registros
+
+##### Seleciona registros por atributos (condicional)
+
+##### Atualiza registros
+
+##### Inspeciona uma busca
+
+##### Índices
+
+##### Agregações e *User Defined Functions* (UDF)
+
+##### Remove registros
+
+
 ## Arquitetura
 No Aerospike, cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a confiabilidade, o Aerospike também replica os dados em diferentes nós.
 
