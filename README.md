@@ -13,17 +13,24 @@ Nesta parte do tutorial ensinaremos como fazer a instalação do Aerospike e con
 
 #### Aerospike Server
 O primeiro passo deste tutorial é instalar o Aerospike Server e para isso começaremos com o *download*:
-* No terminal do linux, cole o seguinte comando: **wget -O aerospike.tgz 'https://www.aerospike.com/download/server/latest/artifact/ubuntu18'**
-* Para extrair o conteúdo da pasta compactada, entre na pasta onde realizou o download pelo terminal e cole o seguinte comando: **tar -xvf aerospike.tgz**
-* O conteúdo será extraído para uma pasta de nome: aerospike-server-community-4.7.0.2-ubuntu18.04
+* No terminal do linux, cole o seguinte comando: 
+```wget -O aerospike.tgz 'https://www.aerospike.com/download/server/latest/artifact/ubuntu18'```
+* Para extrair o conteúdo da pasta compactada, entre na pasta onde realizou o download pelo terminal e cole o seguinte comando: 
+```tar -xvf aerospike.tgz```
+* Para extrair o conteúdo da pasta compactada, entre na pasta onde realizou o download pelo terminal e cole o seguinte comando: ```tar -xvf aerospike.tgz```
+* O conteúdo será extraído para uma pasta de nome: ```aerospike-server-community-4.7.0.2-ubuntu18.04```
 
 Agora, para realizar a instalação:
-* Entre na pasta criada com o seguinte comando: **cd aerospike-server-community-4.7.0.2-ubuntu18.04**
-* Para continuar a instalação é necessário possuir o Python instalado, com um número de versão maior que 2.7 e menor que 3. Com o Python instalado, execute com o comando: **sudo ./asinstall**
+* Entre na pasta criada com o seguinte comando: 
+```cd aerospike-server-community-4.7.0.2-ubuntu18.04```
+* Para continuar a instalação é necessário possuir o Python instalado, com um número de versão maior que 2.7 e menor que 3. Com o Python instalado, execute com o comando: 
+```sudo ./asinstall```
 
 Agora tudo deve estar instalado corretamente, para conferir isso utilize os seguintes comandos:
-* Para inicializar o banco utilize: **sudo service aerospike start**
-* Para se certificar que o banco está rodando utilize: **sudo service aerospike status**
+* Para inicializar o banco utilize: 
+```sudo service aerospike start```
+* Para se certificar que o banco está rodando utilize: 
+```sudo service aerospike status```
 
 #### Instalação do AMC
 O AMC (*Aerospike Management Console*) é uma ferramenta para manipular e monitorar *cluster* de maneira rápida, com updates automáticos dos status dos *clusters*.
@@ -32,34 +39,72 @@ Para a instalação é necessário se certificar de que possui os seguintes paco
 * gcc
 * python-dev
 
-Assim que todas as dependências forem instaladas, para baixar o AMC você deverá entrar no seguinte link: https://www.aerospike.com/download/amc/4.0.27/ e selecionar o pacote para Ubuntu 12.04+.
-Quando o *download* do arquivo terminar é necessário fazer a instalação com o seguinte comando no terminal: **sudo dpkg -i aerospike-amc-community-4.0.27\_amd64.deb**
+Assim que todas as dependências forem instaladas, para baixar o AMC você deverá entrar no seguinte link: ```https://www.aerospike.com/download/amc/4.0.27/``` e selecionar o pacote para Ubuntu 12.04+.
+Quando o *download* do arquivo terminar é necessário fazer a instalação com o seguinte comando no terminal: 
+```sudo dpkg -i aerospike-amc-community-4.0.27\_amd64.deb``` 
 Assim que o ACM for instalado os comandos básicos para utilizá-lo são:
-*  Inicialização: **sudo /etc/init.d/amc start**
-*  Parada: **sudo /etc/init.d/amc stop**
-*  Verificar status: **sudo systemctl status amc**
+*  Inicialização: 
+```sudo /etc/init.d/amc start```
+*  Parada: 
+```sudo /etc/init.d/amc stop```
+*  Verificar status: 
+```sudo systemctl status amc```
 
 ### Instalação e configuração no MAC OS X
 Nesta parte do tutorial ensinaremos como fazer a instalação do Aerospike e configuração para MAC OS X.
 
 #### Aerospike Server e AMC  
 No MAC OS, o Aerospike funciona dentro de um ambiente virtual, por isso, é necessária a instalação do Vagrant (ambiente de desenvolvimento virtual) e do VMWare (máquina virtual).
-* Faça o download e instale o Vagrant : **https://www.vagrantup.com/downloads.html**
-* Faça o download e instale o VMWare: **https://www.virtualbox.org/wiki/Downloads**
+* Faça o download e instale o Vagrant : 
+```https://www.vagrantup.com/downloads.html```
+* Faça o download e instale o VMWare: 
+```https://www.virtualbox.org/wiki/Downloads```
 
  Agora, já podemos começar a instalação do Aerospike:
  
-* Crie e acesse o diretório de trabalho do Aerospike: **mkdir ~/aerospike-vm && cd ~/aerospike-vm**
-* Inicialize a máquina virtual do Aerospike: **vagrant init aerospike/aerospike-ce**
+* Crie e acesse o diretório de trabalho do Aerospike: 
+```mkdir ~/aerospike-vm && cd ~/aerospike-vm```
+* Inicialize a máquina virtual do Aerospike: 
+```vagrant init aerospike/aerospike-ce```
 * Inicialize o Vagrant:
-    * vagrant up
-    * vagrant ssh
-    * sudo service aerospike start
-    * sudo service amc start
+    ``` vagrant up ```
+    ``` vagrant ssh ``` 
+    ``` sudo service aerospike start ``` 
+    ``` sudo service amc start ```
+
+### Modelo de Dados
+A seguir, algumas terminologias usadas em Aerospike que se referem a termos similares de RDBMS:
+
+Aerospike   | RDBMS
+--------- | ------
+namespace | tablespace
+set       | table
+record    | row
+bin       | column
+index     | index
+
+##### Namespaces
+Um *namespace* é uma coleção de dados que segue uma "política" comum, como o número de réplicas, a maneira como o dado é armazenado, e quando ele expira. É o equivalente deste sistema aos *databases* dos sistemas relacionais. Um *namespace* contém *records*, *indexes*, e políticas, que determinam alguns comportamentos, conforme descrito acima. 
+
+##### Sets
+Em *namespaces*, *records* pertecem a *containers* lógicos chamados *sets*. *Sets* permitem que aplicações agrupem dados logicamente em coleções. Eles herdam as políticas definidas por seu *namespace* e podem definir regras adicionais, específicas para aqueles dados. Por exemplo, índices secundários podem ser especificados apenas para um *set* em particular.
+
+##### Records
+Um *record* (registro) é a unidade básica de armazenamento em um banco de dados Aerospike. Registros podem pertencem a um *namespace* ou a um *set* dentro de um *namespace*. *Records* usam uma *Key* (chave) como seu identificador único.
+Cada registro contém os seguintes componentes:
+* Identificador único (Key): Registros são identificados e armazenados utilizando um *hash* de sua *Key*.
+* Metadata: informações sobre versão (geração), expiração, mestre, partição onde está armazenada. Gerado automáticamente.
+* *Bins*: equivalente aos campos em SGBDs relacionais.
+
+##### Bins
+Em um registro, dados são armazenados em um ou mais *bins* (campos). Campos consistem em um nome e um valor e não especificam um tipo de dados (estes são definidos pelo valor armazenado, ou seja, de maneira dinâmica), o que agrega mais flexibilidade ao modelo de dados.
+
+##### Keys e Digests
+Chaves (*Keys*) são utilizadas para ler e escrever registros (*records*) no banco. Quando uma chave é definida, ela e a informação de seu *set* (o nome dele) são transformados utilizado uma função *hash*, gerando um *digest* de 160 bits, utilizado para endereçar aquele registro no banco. Ou seja, o usuário utiliza a chave em suas operações, enquanto o *digest* é utilizado para armazenar o registro e recupera-lo.
 
 ### Como interagir com o sistema?
 Conforme citado acima, uma das maneiras de se interagir com o Aerospike é através do [AMC](https://www.aerospike.com/docs/amc/) (*Aerospike Management Console*), que fornece uma interface gráfica onde é possível analizar os nós do cluster e algumas métrias.
-
+Outra maneira, é através do (*Aerospike Query Client*), utilizando a AQL (*Aerospike Query Language*). Com o Aerospike inicializado, basta digitar ```aql``` no terminal que o *Shell* AQC será inicializado, onde é possível utilizar a linguagem *SQL-like* do Aerospike para inserir e/ou manipular os *namespaces*, *sets*, *rows* e *bins* do banco.  
 
 ### Comandos Básicos: Aerospike Query Language (AQL)
 O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas. 
@@ -67,21 +112,8 @@ O Aerospike possui sua própria linguagem para realizar manipulações no banco 
 ## Arquitetura
 O Aerospike utiliza o *Shared-Nothing* (SN), arquitetura de computação distribuída onde cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a  confiabilidade, o Aerospike também replica os dados em diferentes nós.
 
-### Terminologia
-A seguir, algumas terminologias usadas em Aerospike que se referem a termos similares de RDBMS:
-
-Aerospike   | RDBMS
---------- | ------
-namespace | tablespace
-record    | row
-set       | table
-bin       | column
-index     | index
-
-
 ### Distribuição
-No Aerospike, um *namespace* é uma coleção de dados que segue uma "política" comum, como o número de réplicas, a maneira como o dado é armazenado, e quando ele expira. É o equivalente deste sistema aos *databases* dos sistemas relacionais.
-Cada *namespace* é dividido em 4096 partições lógicas, que são divididas igualmente entre os n nós do *cluster*. Ou seja, quando não há réplicas dos dados (fator de replicação igual a 1), cada nó armazena aproximadamente 
+No Aerospike, cada *namespace* é dividido em 4096 partições lógicas, que são divididas igualmente entre os n nós do *cluster*. Ou seja, quando não há réplicas dos dados (fator de replicação igual a 1), cada nó armazena aproximadamente 
 1/n dos dados.
 Essa divisão se dá da seguinte maneira: a chave de cada registro (independente do tamanho) é transformado em uma *hashtag* de 20 *bytes*, utilizando o RIPEMD160 (uma função hash de distribuição aleatória). Utilizando os 12 primeiros *bits* da *hashtag*, o ID da partição deste registro é determinado. Graças às características desta função, as partições terão uma distribuição normal dentro dos diferentes nós do cluster, não havendo necessidade de *sharding* manual.
 Quando nós são adicionados ou removidos do *cluster*, um novo *cluster* se formará e seus nós se coordenarão para dividir as partições entre eles. Então, o *cluster* automaticamente se rebalanceará.
