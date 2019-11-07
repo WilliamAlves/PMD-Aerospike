@@ -6,7 +6,7 @@ Desenvolvida em C, opera em três camadas: Uma camada de dados, uma camada de di
 A camada de distribuição é replicada através de diferentes nós, para garantir consistência. Permitindo também que o banco de dados se mantenha operacional frente a falhas em nós individuais, ou a remoção de algum deles.
 A camada de cliente é utilizada para manter controle sobre as configurações do *cluster* e a localização dos dados, e gerenciar o servidor.
 A camada de dados é otimizada para armazenar os dados em discos rígidos e memórias flash, sendo os índices do banco armazenados em RAM para rápida disponibilidade, e os dados escritos escritos em blocos, para diminuir a latência.
-Para o desenvolvimento deste documento e exemplos, utilizamos versão  4.7.0.2 do Aerospike.
+Para o desenvolvimento deste documento e exemplos, utilizamos versão ```4.7.0.2``` do Aerospike.
 
 ### Instalação e configuração no Ubuntu 18.04+
 Nesta parte do tutorial ensinaremos como fazer a instalação do Aerospike e configuração para Ubuntu 18.04 ou mais recente.
