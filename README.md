@@ -73,7 +73,7 @@ No MAC OS, o Aerospike funciona dentro de um ambiente virtual, por isso, é nece
     ``` sudo service amc start ```
 
 ### Modelo de Dados
-A seguir, algumas terminologias usadas em Aerospike que se referem a termos similares de RDBMS:
+O modelo de dados do Aerospike é *schema-less*, com registros podendo ser adicionados com campos novos sem que o esquema dos dados inseridos anteriormente tenha que ser alterado. Abaixo, são descritos os conceitos de *namespaces*, *sets*, *records* *bins* e *keys*, utilizados pelo Aerospike.
 
 Aerospike   | RDBMS
 --------- | ------
@@ -110,7 +110,7 @@ Outra maneira, é através do (*Aerospike Query Client*), utilizando a AQL (*Aer
 O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas. 
 
 ## Arquitetura
-O Aerospike utiliza o *Shared-Nothing* (SN), arquitetura de computação distribuída onde cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a  confiabilidade, o Aerospike também replica os dados em diferentes nós.
+No Aerospike, cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a confiabilidade, o Aerospike também replica os dados em diferentes nós.
 
 ### Distribuição
 No Aerospike, cada *namespace* é dividido em 4096 partições lógicas, que são divididas igualmente entre os n nós do *cluster*. Ou seja, quando não há réplicas dos dados (fator de replicação igual a 1), cada nó armazena aproximadamente 
