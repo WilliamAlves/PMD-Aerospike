@@ -1,11 +1,15 @@
 # AEROSPIKE
 
-## Introdução
 O Aerospike é um banco de dados NoSQL  Key-Value distribuído, desenhado para aplicações que devem estar sempre disponíveis e lidar com big data de maneira confiável.
+
 Desenvolvida em C, opera em três camadas: Uma camada de dados, uma camada de distribuição autogerenciada (o *"Aerospike Smart Cluster"*) e uma camada de cliente (o *"Aerospike Smart Client"*).
+
 A camada de distribuição é replicada através de diferentes nós, para garantir consistência. Permitindo também que o banco de dados se mantenha operacional frente a falhas em nós individuais, ou a remoção de algum deles.
+
 A camada de cliente é utilizada para manter controle sobre as configurações do *cluster* e a localização dos dados, e gerenciar o servidor.
+
 A camada de dados é otimizada para armazenar os dados em discos rígidos e memórias flash, sendo os índices do banco armazenados em RAM para rápida disponibilidade, e os dados escritos escritos em blocos, para diminuir a latência.
+
 Para o desenvolvimento deste documento e exemplos, utilizamos versão ```4.7.0.2``` do Aerospike.
 
 ### Instalação e configuração no Ubuntu 18.04+
@@ -13,35 +17,48 @@ Nesta parte do tutorial ensinaremos como fazer a instalação do Aerospike e con
 
 #### Aerospike Server
 O primeiro passo deste tutorial é instalar o Aerospike Server e para isso começaremos com o *download*:
+
 * No terminal do linux, cole o seguinte comando: 
 ```wget -O aerospike.tgz 'https://www.aerospike.com/download/server/latest/artifact/ubuntu18'```
+
 * Para extrair o conteúdo da pasta compactada, entre na pasta onde realizou o download pelo terminal e cole o seguinte comando: 
 ```tar -xvf aerospike.tgz```
+
 * Para extrair o conteúdo da pasta compactada, entre na pasta onde realizou o download pelo terminal e cole o seguinte comando: ```tar -xvf aerospike.tgz```
+
 * O conteúdo será extraído para uma pasta de nome: ```aerospike-server-community-4.7.0.2-ubuntu18.04```
 
+
 Agora, para realizar a instalação:
+
 * Entre na pasta criada com o seguinte comando: 
 ```cd aerospike-server-community-4.7.0.2-ubuntu18.04```
+
 * Para continuar a instalação é necessário possuir o Python instalado, com um número de versão maior que 2.7 e menor que 3. Com o Python instalado, execute com o comando: 
 ```sudo ./asinstall```
 
+
 Agora tudo deve estar instalado corretamente, para conferir isso utilize os seguintes comandos:
+
 * Para inicializar o banco utilize: 
 ```sudo service aerospike start```
+
 * Para se certificar que o banco está rodando utilize: 
 ```sudo service aerospike status```
 
 #### Instalação do AMC
 O AMC (*Aerospike Management Console*) é uma ferramenta para manipular e monitorar *cluster* de maneira rápida, com updates automáticos dos status dos *clusters*.
+
 Para a instalação é necessário se certificar de que possui os seguintes pacotes:
 * python (2.6+)
 * gcc
 * python-dev
 
 Assim que todas as dependências forem instaladas, para baixar o AMC você deverá entrar no seguinte link: ```https://www.aerospike.com/download/amc/4.0.27/``` e selecionar o pacote para Ubuntu 12.04+.
+
 Quando o *download* do arquivo terminar é necessário fazer a instalação com o seguinte comando no terminal: 
 ```sudo dpkg -i aerospike-amc-community-4.0.27\_amd64.deb``` 
+
 Assim que o ACM for instalado os comandos básicos para utilizá-lo são:
 *  Inicialização: 
 ```sudo /etc/init.d/amc start```
@@ -55,8 +72,10 @@ Nesta parte do tutorial ensinaremos como fazer a instalação do Aerospike e con
 
 #### Aerospike Server e AMC  
 No MAC OS, o Aerospike funciona dentro de um ambiente virtual, por isso, é necessária a instalação do Vagrant (ambiente de desenvolvimento virtual) e do VMWare (máquina virtual).
+
 * Faça o download e instale o Vagrant : 
 ```https://www.vagrantup.com/downloads.html```
+
 * Faça o download e instale o VMWare: 
 ```https://www.virtualbox.org/wiki/Downloads```
 
@@ -64,8 +83,10 @@ No MAC OS, o Aerospike funciona dentro de um ambiente virtual, por isso, é nece
  
 * Crie e acesse o diretório de trabalho do Aerospike: 
 ```mkdir ~/aerospike-vm && cd ~/aerospike-vm```
+
 * Inicialize a máquina virtual do Aerospike: 
 ```vagrant init aerospike/aerospike-ce```
+
 * Inicialize o Vagrant:
     ``` vagrant up ```
     ``` vagrant ssh ``` 
