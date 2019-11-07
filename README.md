@@ -147,45 +147,106 @@ Outra maneira, é através do (*Aerospike Query Client*), utilizando a AQL (*Aer
 | *Imagem de um terminal rodando o AQC* |
 
 ### Comandos Básicos: Aerospike Query Language (AQL)
-O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas, a *Aerospike Query Language* (AQL), baseada no SQL. Ela é utilizada no terminal, a partir do *Aerospike Query Client* (AQC).
+O Aerospike possui sua própria linguagem para realizar manipulações no banco e efetuar pesquisas, a Aerospike Query Language (AQL), baseada no SQL. Ela é utilizada no terminal, a partir do Aerospike Query Client (AQC).
 
 ##### Inicializando o AQC 
 1. No terminal, digite: 
-```sudo service aerospike start``` (Linux) ou
-``` vagrant up ```
-``` vagrant ssh ``` 
-``` sudo service aerospike start ``` 
-``` sudo service amc start ```  (Mac OS)
+sudo service aerospike start (Linux) ou
+ vagrant up 
+ vagrant ssh  
+ sudo service aerospike start  
+ sudo service amc start   (Mac OS)
 para iniciar o Aerospike.
-2. Digite então ```aql``` para iniciar o AQC.
+2. Digite então aql para iniciar o AQC.
 
-##### Cria um novo *namespace*
+##### Cria um novo namespace
+1. Para criar um novo namespace, você deve alterar as configurações no arquivo de configuração do namespace.
+###### Aerospike database configuration file.
+    service {
+        user root
+        group root
+        paxos-single-replica-limit 1 # Number of nodes where the replica
+        pidfile /var/run/aerospike/asd.pid
+        service-threads 4
+        transaction-queues 4
+        transaction-threads-per-queue 4
+        proto-fd-max 15000
+    }
 
-##### Lista os *namespaces*
+    logging {
+        file /var/log/aerospike/aerospike.log {
+        context any info
+        }
+    }
 
-##### Lista os *sets*
+    network {
+        service {
+        address any
+        port 3000
+        }
 
-##### Deleta um *namespace*
+         heartbeat {
+         mode multicast
+         address 239.1.99.222
+         port 9918
+         interval 150
+         timeout 10
+         }
+        
+         fabric {
+         port 3001
+        }
+
+        info {
+        port 3003
+        }
+    }
+
+    namespace test {
+        replication-factor 2
+        memory-size 4G
+        default-ttl 30d # 30 days, use 0 to never expire/evict.
+        storage-engine memory
+    }
+
+    namespace bar {
+    replication-factor 2
+    memory-size 4G
+    default-ttl 30d # 30 days, use 0 to never expire/evict.
+    storage-engine memory
+    }
+2. Copie o bloco de namespace de teste e cole-o logo em seguida, alterando o nome para o que você deseja.
+3. Salve o arquivo e pronto. Seu novo namespace está criado.
+
+##### Lista os namespaces
+Vá para o prompt do aql e digite o seguinte comando
+#
+    aql> show namespaces   
+            
+##### Lista os sets
+Vá para o prompt do aql e digite o seguinte comando
+#
+    aql> show sets 
 
 ##### Insere registros
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_100','MA',342)``` 
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_101','AZ',345)```
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_102','CA',345)```
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_103','AL',340)```
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_104','TX',347)```
-```aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_105','MA',323)```
-
-INSERT INTO <ns>[.<set>] (PK, <bins>) VALUES (<key>, <values>)
-      DELETE FROM <ns>[.<set>] WHERE PK = <key>
-      TRUNCATE <ns>[.<set>] [upto <LUT>] 
-
-          <ns> is the namespace for the record.
-          <set> is the set name for the record.
-          <key> is the record's primary key.
-          <bins> is a comma-separated list of bin names.
-          <values> is comma-separated list of bin values, which may include type cast expressions. Set to NULL (case insensitive & w/o quotes) to delete the bin.
-          <LUT> is last update time upto which set or namespace needs to be truncated. LUT is either nanosecond since Unix epoch like 1513687224599000000 or in date string in format like "Dec 19 2017 12:40:00".
-
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_100','MA',342) 
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_101','AZ',345)
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_102','CA',345)
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_103','AL',340)
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_104','TX',347)
+    aql> INSERT INTO user_profile.west (PK,location,last_activity) VALUES ('cookie_105','MA',323)
+#
+    INSERT INTO <ns>[.<set>] (PK, <bins>) VALUES (<key>, <values>)
+    DELETE FROM <ns>[.<set>] WHERE PK = <key>
+    TRUNCATE <ns>[.<set>] [upto <LUT>] 
+#
+          <ns> é o namespace do record.
+          <set> é o nome do set para o record.
+          <key> é a chave-primária do record.
+          <bins> é uma lista de nomes de bins.
+          <values> é uma lista de valores de bins, pode conter expressão de tipo.
+          <LUT> é o último momento de update, onde o set ou o namespace precisa ser truncado.
+#
           INSERT INTO test.demo (PK, foo, bar) VALUES ('key1', 123, 'abc')
           INSERT INTO test.demo (PK, foo, bar) VALUES ('key1', CAST('123' AS INT), JSON('{"a": 1.2, "b": [1, 2, 3]}'))
           INSERT INTO test.demo (PK, foo, bar) VALUES ('key1', LIST('[1, 2, 3]'), MAP('{"a": 1, "b": 2}'))
@@ -194,7 +255,7 @@ INSERT INTO <ns>[.<set>] (PK, <bins>) VALUES (<key>, <values>)
           
                   Supported AQL Types:
       
-              Bin Value Type                    Equivalent Type Name(s)
+            Tipo do valor do Bin              Nome do tipo equivalente
            ===============================================================
             Integer                           DECIMAL, INT, NUMERIC
             Floating Point                    FLOAT, REAL
@@ -204,145 +265,129 @@ INSERT INTO <ns>[.<set>] (PK, <bins>) VALUES (<key>, <values>)
             GeoJSON                           GEOJSON
             String                            CHAR, STRING, TEXT, VARCHAR
            ===============================================================
-      
-        [Note:  Type names and keywords are case insensitive.]
 
 ##### Lista registros
 
 ##### Seleciona registros
-SELECT <bins> FROM <ns>[.<set>]
-      SELECT <bins> FROM <ns>[.<set>] WHERE <bin> = <value>
-      SELECT <bins> FROM <ns>[.<set>] WHERE <bin> BETWEEN <lower> AND <upper>
-      SELECT <bins> FROM <ns>[.<set>] WHERE PK = <key>
-      SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> = <value>
-      SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> BETWEEN <lower> AND <upper>
-      SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> CONTAINS <GeoJSONPoint>
-      SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> WITHIN <GeoJSONPolygon>
+#
+    SELECT <bins> FROM <ns>[.<set>]
+    SELECT <bins> FROM <ns>[.<set>] WHERE <bin> = <value>
+    SELECT <bins> FROM <ns>[.<set>] WHERE <bin> BETWEEN <lower> AND <upper>
+    SELECT <bins> FROM <ns>[.<set>] WHERE PK = <key>
+    SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> = <value>
+    SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> BETWEEN <lower> AND <upper>
+    SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> CONTAINS <GeoJSONPoint>
+    SELECT <bins> FROM <ns>[.<set>] IN <indextype> WHERE <bin> WITHIN <GeoJSONPolygon>
 
-          <ns> is the namespace for the records to be queried.
-          <set> is the set name for the record to be queried.
-          <key> is the record's primary key.
-          <bin> is the name of a bin.
-          <value> is the value of a bin.
-          <indextype> is the type of a index user wants to query. (LIST/MAPKEYS/MAPVALUES)
-          <bins> can be either a wildcard (*) or a comma-separated list of bin names.
-          <lower> is the lower bound for a numeric range query.
-          <upper> is the lower bound for a numeric range query.
-
-
+          <ns> é o namespace do record.
+          <set> é o nome do set para o record.
+          <key> é a chave-primária do record.
+          <bin> é o nome do bin.
+          <value> é o valor do bin.
+          <indextype> é o tipo do index que o usuário deseja procurar. (LIST/MAPKEYS/MAPVALUES)
+          <bins> é uma lista de nomes de bins.
+          <lower> é o menor valor numa busca.
+          <upper> é o maior valor numa busca.
+          
 ##### Seleciona registros por atributos (condicional)
-```aql> SELECT * FROM user_profile.west WHERE last_activity BETWEEN 340 AND 345```
-
-##### Atualiza registros
+#
+    aql> SELECT * FROM user_profile.west WHERE last_activity BETWEEN 340 AND 345
 
 ##### Inspeciona uma busca
     EXPLAIN SELECT * FROM <ns>[.<set>] WHERE PK = <key>
 
-          <ns> is the namespace for the records to be queried.
-          <set> is the set name for the record to be queried.
-          <key> is the record's primary key.
-
-      Examples:
-
+          <ns> é o namespace do record.
+          <set> é o nome do set para o record.
+          <key> é a chave-primária do record.
+      Exemplo:
           EXPLAIN SELECT * FROM test.demo WHERE PK = 'key1'
 
 ##### Índices
-``` CREATE INDEX <index> ON <ns>[.<set>] (<bin>) NUMERIC|STRING|GEO2DSPHERE``` 
-```DROP INDEX <ns>[.<set>] <index>```
+1. Criar índices:
+#
+    CREATE INDEX <index> ON <ns>[.<set>] (<bin>) NUMERIC|STRING|GEO2DSPHERE
+    aql> CREATE INDEX idx_foo ON test.demo (foo) NUMERIC 
 
-```aql> CREATE INDEX ix1 ON user_profile.west (last_activity) NUMERIC```
-```aql > show indexes```
+2. Deletar índices:
+#
+    DROP INDEX <ns>[.<set>] <index>]
+    aql> DROP INDEX teste.demo idx_foo 
+3. Mostrar índices
+#
+    ql > show indexes
 
-```CREATE INDEX idx_foo ON test.demo (foo) NUMERIC``` 
-```DROP INDEX test.demo idx_foo``` 
+##### Agregações e User Defined Functions (UDF)
 
-##### Agregações e *User Defined Functions* (UDF)
-
-     AGGREGATE <module>.<function>(<args>) ON <ns>[.<set>]
+      AGGREGATE <module>.<function>(<args>) ON <ns>[.<set>]
       AGGREGATE <module>.<function>(<args>) ON <ns>[.<set>] WHERE <bin> = <value>
       AGGREGATE <module>.<function>(<args>) ON <ns>[.<set>] WHERE <bin> BETWEEN <lower> AND <upper>
 
-          <module> is UDF module containing the function to invoke.
-          <function> is UDF to invoke.
-          <args> is a comma-separated list of argument values for the UDF.
-          <ns> is the namespace for the records to be queried.
-          <set> is the set name for the record to be queried.
-          <key> is the record's primary key.
-          <bin> is the name of a bin.
-          <value> is the value of a bin.
-          <lower> is the lower bound for a numeric range query.
-          <upper> is the lower bound for a numeric range query.
+          <module> é o módulo UDF que possui a função que será chamada.
+          <function> é o UDF que será chamada.
+          <args> é uma lista que contém os argumentos de UDF.
+          <ns> é o namespace do record.
+          <set> é o nome do set para o record.
+          <key> é a chave-primária do record.
+          <bin> é o nome do bin.
+          <value> é o valor do bin.
+          <lower> é o menor valor numa busca.
+          <upper> é o maior valor numa busca.
 
-      Examples:
+      Exemplos:
 
           AGGREGATE myudfs.udf2(2) ON test.demo WHERE foo = 123
           AGGREGATE myudfs.udf2(2) ON test.demo WHERE foo BETWEEN 0 AND 999
 
 
-     EXECUTE <module>.<function>(<args>) ON <ns>[.<set>]
+      EXECUTE <module>.<function>(<args>) ON <ns>[.<set>]
       EXECUTE <module>.<function>(<args>) ON <ns>[.<set>] WHERE PK = <key>
       EXECUTE <module>.<function>(<args>) ON <ns>[.<set>] WHERE <bin> = <value>
       EXECUTE <module>.<function>(<args>) ON <ns>[.<set>] WHERE <bin> BETWEEN <lower> AND <upper>
-
-          <module> is UDF module containing the function to invoke.
-          <function> is UDF to invoke.
-          <args> is a comma-separated list of argument values for the UDF.
-          <ns> is the namespace for the records to be queried.
-          <set> is the set name for the record to be queried.
-          <key> is the record's primary key.
-          <bin> is the name of a bin.
-          <value> is the value of a bin.
-          <lower> is the lower bound for a numeric range query.
-          <upper> is the lower bound for a numeric range query.
-
-      Examples:
-
-          EXECUTE myudfs.udf1(2) ON test.demo
-          EXECUTE myudfs.udf1(2) ON test.demo WHERE PK = 'key1'
+      EXECUTE myudfs.udf1(2) ON test.demo
+      EXECUTE myudfs.udf1(2) ON test.demo WHERE PK = 'key1'
 
 
-##### Remove registros
-
+##### Remover Records
+Este exemplo remove a chave mykey do namespace test no set myset.
+# 
+    Key key = new Key("test", "myset", "mykey");
+    client.delete(policy, key);
 ##### info
-     SHOW NAMESPACES | SETS | BINS | INDEXES
+      SHOW NAMESPACES | SETS | BINS | INDEXES
       SHOW SCANS | QUERIES
       STAT NAMESPACE <ns> | INDEX <ns> <indexname>
       STAT SYSTEM
       ASINFO <ASInfoCommand>
       
-            SHOW USER [<user>]
-      SHOW USERS
-      SHOW ROLE <role>
-      SHOW ROLES
-     
-  JOB MANAGEMENT
-      KILL_QUERY <transaction_id>
-      KILL_SCAN <scan_id>
-      
-  USER ADMINISTRATION
       SHOW USER [<user>]
       SHOW USERS
       SHOW ROLE <role>
       SHOW ROLES
-      
-  MANAGE UDFS
+#     
+    JOB MANAGEMENT
+      KILL_QUERY <transaction_id>
+      KILL_SCAN <scan_id>
+#      
+    USER ADMINISTRATION
+      SHOW USER [<user>]
+      SHOW USERS
+      SHOW ROLE <role>
+      SHOW ROLES
+#      
+    MANAGE UDFS
       SHOW MODULES
       DESC MODULE <filename>
       
-          <filepath> is file path to the UDF module(in single quotes).
-          <filename> is file name of the UDF module.
-      
-      Examples:
+          <filepath> é o caminho para o modulo UDF.
+          <filename> é o nome do arquivo do módulo UDF.
+      Exemplos:
       
           SHOW MODULES
           DESC MODULE test.lua
-      
-  RUN <filepath>
-      
-  SYSTEM <bash command>
-      
-      
-  SETTINGS
+#      
+    RUN <filepath>
+    SYSTEM <bash command>
+    SETTINGS
         ECHO                          (true | false, default false)
         VERBOSE                       (true | false, default false)
         OUTPUT                        (TABLE | JSON | MUTE | RAW, default TABLE)
@@ -352,33 +397,21 @@ SELECT <bins> FROM <ns>[.<set>]
         LUA_USERPATH                  <path>, default : /opt/aerospike/usr/udf/lua
         USE_SMD                       (true | false, default false)
         RECORD_TTL                    (time in sec, default: 0)
-        RECORD_PRINT_METADATA         (true | false, default false, prints record metadata)
+        RECORD_PRINT_METADATA         (true | false, default false, mostra na tela os metadados dos records)
         REPLICA_ANY                   (true | false, default false)
         KEY_SEND                      (true | false, default false)
         DURABLE_DELETE                (true | false, default false)
-        FAIL_ON_CLUSTER_CHANGE        (true | false, default true, policy applies to scans)
         SCAN_PRIORITY                 priority of scan (LOW, MEDIUM, HIGH, AUTO), default : AUTO
-        NO_BINS                       (true | false, default false, No bins as part of scan and query result)
-        LINEARIZE_READ                (true | false, default false, Make read linearizable, applicable only for namespace with strong_consistency enabled.)
-  
-      
-      To get the value of a setting, run:
-      	
+        
+      Para ter o valor da configuração use:
           aql> GET <setting>
       	
-      To set the value of a setting, run:
-      	
-          aql> SET <setting> <value>
-      	
-      To reset the value of a setting back to default, run:
-      	
+      Para resetar o valor de uma configuração para o default, use:
           aql> RESET <setting>
       	
-      	
-    OTHER
+    OUTROS
         HELP
         QUIT|EXIT|Q
-
 
 ## Arquitetura
 No Aerospike, cada requisição é satisfeita por um único nó, que armazena e é o responsável (mestre) de uma parte do total de dados. Essa arquitetura cria um sistema sem um ponto único de falha, e permite a escalabilidade horizontal. Para aumentar a disponibilidade e a confiabilidade, o Aerospike também replica os dados em diferentes nós.
