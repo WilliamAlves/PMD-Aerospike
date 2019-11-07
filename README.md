@@ -102,6 +102,10 @@ Em um registro, dados são armazenados em um ou mais *bins* (campos). Campos con
 ##### Keys e Digests
 Chaves (*Keys*) são utilizadas para ler e escrever registros (*records*) no banco. Quando uma chave é definida, ela e a informação de seu *set* (o nome dele) são transformados utilizado uma função *hash*, gerando um *digest* de 160 bits, utilizado para endereçar aquele registro no banco. Ou seja, o usuário utiliza a chave em suas operações, enquanto o *digest* é utilizado para armazenar o registro e recupera-lo.
 
+| ![Modelo de dados](https://github.com/WilliamAlves/PMD-Aerospike/blob/master/images/data-model1.png) | 
+|:--:| 
+| *Ilustração do modelo de dados do Aerospike* |
+
 ### Como interagir com o sistema?
 Conforme citado acima, uma das maneiras de se interagir com o Aerospike é através do [AMC](https://www.aerospike.com/docs/amc/) (*Aerospike Management Console*), que fornece uma interface gráfica onde é possível analizar os nós do cluster e algumas métrias.
 
@@ -165,6 +169,10 @@ Enquanto na replicação assíncrona, uma das formas de se relaxar a consistênc
 * O nó B, apenas então, envia uma mensagem de confirmação de escrita ao nó A.
 
 Quando o banco está se recuperando de um reparticionamento, podem haver escritas perdidas, na replicação assíncrona.
+
+| ![Consistency](https://github.com/WilliamAlves/PMD-Aerospike/blob/master/images/consistency.png) | 
+|:--:| 
+| *Ilustração de como o Aerospike atualiza um registro e suas cópias, de modo a manter a consistência* |
 
 
 ### Disponibilidade
